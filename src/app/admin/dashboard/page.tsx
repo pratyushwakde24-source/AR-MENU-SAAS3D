@@ -20,6 +20,8 @@ import {
   LogOut
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+const MotionDiv = motion.div as any;
+const MotionTr = motion.tr as any;
 import { useRouter } from "next/navigation";
 
 export default function SuperAdminDashboard() {
@@ -105,7 +107,7 @@ export default function SuperAdminDashboard() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, idx) => (
-            <motion.div
+            <MotionDiv
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -120,7 +122,7 @@ export default function SuperAdminDashboard() {
                 <p className="text-3xl font-headline font-bold leading-tight">{stat.value}</p>
               </div>
               <div className={`absolute -right-4 -bottom-4 w-24 h-24 bg-${stat.color}/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity`} />
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
 
@@ -172,7 +174,7 @@ export default function SuperAdminDashboard() {
                        </tr>
                     ) : (
                        filteredRestaurants.map((res) => (
-                          <motion.tr 
+                          <MotionTr 
                             key={res.id} 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -219,7 +221,7 @@ export default function SuperAdminDashboard() {
                                    <MoreVertical className="w-5 h-5 text-foreground/40" />
                                 </button>
                              </td>
-                          </motion.tr>
+                          </MotionTr>
                        ))
                     )}
                  </tbody>
@@ -231,15 +233,15 @@ export default function SuperAdminDashboard() {
       {/* Edit Modal */}
       <AnimatePresence>
         {isEditModalOpen && selectedRestaurant && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-            <motion.div
+           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <MotionDiv
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsEditModalOpen(false)}
               className="absolute inset-0 bg-black/80 backdrop-blur-md"
             />
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -307,7 +309,7 @@ export default function SuperAdminDashboard() {
                     </button>
                  </div>
               </div>
-            </motion.div>
+            </MotionDiv>
           </div>
         )}
       </AnimatePresence>
