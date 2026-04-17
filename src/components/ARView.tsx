@@ -18,7 +18,12 @@ import { createXRStore, XR, ARButton, useXRHitTest, Interactive, useXR, useXREve
 import { useEffect } from "react";
 import * as THREE from "three";
 
-const store = createXRStore();
+const store = createXRStore({
+  sessionInit: {
+    requiredFeatures: ['hit-test', 'local-floor'],
+    optionalFeatures: ['dom-overlay'],
+  }
+});
 const MotionDiv = motion.div as any;
 
 function PizzaModel() {
@@ -821,18 +826,17 @@ function ARScene({
   model, 
   placed, 
   setPlaced, 
-  isPresenting,
   placement,
   setPlacement
 }: { 
   model: React.ReactNode, 
   placed: boolean, 
   setPlaced: (v: boolean) => void, 
-  isPresenting: boolean,
   placement: { position: THREE.Vector3, quaternion: THREE.Quaternion } | null,
   setPlacement: (p: { position: THREE.Vector3, quaternion: THREE.Quaternion }) => void
 }) {
   const reticleRef = useRef<THREE.Group>(null);
+  const isPresenting = useXR((state) => !!state.session);
 
   useXRHitTest((results, getWorldMatrix) => {
     if (isPresenting && !placed && reticleRef.current) {
@@ -983,7 +987,6 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
                   model={currentItem.model} 
                   placed={placed} 
                   setPlaced={setPlaced} 
-                  isPresenting={isPresenting}
                   placement={placement}
                   setPlacement={setPlacement}
                 />
