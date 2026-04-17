@@ -900,7 +900,7 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
               className="w-full h-full object-cover grayscale-[0.2] brightness-[0.5]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/20"></div>
-          </motion.div>
+          </MotionDiv>
         </AnimatePresence>
       </div>
 
@@ -952,7 +952,7 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
               <RotateCw className="w-3 h-3 text-secondary" />
               <span>Swipe to rotate</span>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
 
         {/* Tracking Status & Instructions */}
@@ -970,7 +970,7 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
                    <span className="text-xs font-headline font-bold uppercase tracking-[0.2em] text-primary">Scanning Surface</span>
                 </div>
                 <p className="text-[10px] text-foreground/80 font-light">Point your camera at a table or floor</p>
-              </motion.div>
+              </MotionDiv>
             )}
           </AnimatePresence>
 
@@ -994,9 +994,9 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
               
               <div className="flex-grow glass p-6 rounded-[2.5rem] relative overflow-hidden group shadow-2xl">
                  <div className="absolute top-4 right-6">
-                    <span className="text-2xl font-headline font-bold text-tertiary">{currentItem.price}</span>
+                    <span className="text-10px uppercase tracking-widest text-primary font-bold">Interactive View</span>
                  </div>
-                 <motion.div
+                 <MotionDiv
                    key={currentIndex}
                    initial={{ x: 20, opacity: 0 }}
                    animate={{ x: 0, opacity: 1 }}
@@ -1012,7 +1012,7 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
                       ))}
                       <span className="text-[10px] text-foreground/30 ml-2 uppercase font-bold tracking-tight">{currentItem.rating} ({currentItem.reviews} reviews)</span>
                    </div>
-                 </motion.div>
+                 </MotionDiv>
               </div>
 
               <button 
