@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+const MotionDiv = motion.div as any;
 import { 
   Store, 
   Mail, 
@@ -67,7 +68,7 @@ export default function AuthPage() {
       <div className="w-full max-w-[1100px] grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
         
         {/* Left Side: Branding/Intro */}
-        <motion.div 
+        <MotionDiv 
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           className="hidden lg:block space-y-8"
@@ -99,10 +100,10 @@ export default function AuthPage() {
                </div>
              ))}
           </div>
-        </motion.div>
+        </MotionDiv>
 
         {/* Right Side: Auth Card */}
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="w-full max-w-md mx-auto"
@@ -111,7 +112,7 @@ export default function AuthPage() {
              {/* Success State */}
              <AnimatePresence>
                {success && (
-                 <motion.div 
+                 <MotionDiv 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="absolute inset-0 z-50 bg-[#050505] flex flex-col items-center justify-center p-8 text-center"
@@ -127,7 +128,7 @@ export default function AuthPage() {
                     >
                       Back to Login
                     </button>
-                 </motion.div>
+                 </MotionDiv>
                )}
              </AnimatePresence>
 
@@ -228,7 +229,7 @@ export default function AuthPage() {
           <p className="text-center mt-8 text-[10px] text-foreground/20 uppercase font-bold tracking-[0.3em]">
              Luminary OS v1.0 • Secure Auth
           </p>
-        </motion.div>
+        </MotionDiv>
       </div>
     </div>
   );
