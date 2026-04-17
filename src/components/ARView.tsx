@@ -14,7 +14,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { motion as motion3d } from "framer-motion-3d";
 import { ShoppingBag, ArrowLeft, ArrowRight, Cpu, ZoomIn, RotateCw, Camera } from "lucide-react";
-import { createXRStore, XR, ARButton, useXRHitTest, Interactive, useXR } from "@react-three/xr";
+import { createXRStore, XR, ARButton, useXRHitTest, Interactive, useXR, useXREvent } from "@react-three/xr";
 import { useEffect } from "react";
 import * as THREE from "three";
 
@@ -817,22 +817,47 @@ const MENU_ITEMS = [
   { id: 19, name: "Grilled Lobster", price: "$52", description: "Whole lobster grilled with garlic butter and herbs.", model: <LobsterModel />, color: "#e63946", rating: "4.8", reviews: "76", image: "/items/lobster.png" },
 ];
 
-function ARScene({ model, placed, setPlaced, isPresenting }: { model: React.ReactNode, placed: boolean, setPlaced: (v: boolean) => void, isPresenting: boolean }) {
-  const reticleRef = useRef<THREE.Mesh>(null);
+function ARScene({ 
+  model, 
+  placed, 
+  setPlaced, 
+  isPresenting,
+  placement,
+  setPlacement
+}: { 
+  model: React.ReactNode, 
+  placed: boolean, 
+  setPlaced: (v: boolean) => void, 
+  isPresenting: boolean,
+  placement: { position: THREE.Vector3, quaternion: THREE.Quaternion } | null,
+  setPlacement: (p: { position: THREE.Vector3, quaternion: THREE.Quaternion }) => void
+}) {
+  const reticleRef = useRef<THREE.Group>(null);
 
   useXRHitTest((results, getWorldMatrix) => {
-    if (isPresenting && !placed && reticleRef.current && results.length > 0) {
-      getWorldMatrix(reticleRef.current.matrix, results[0]);
-      reticleRef.current.matrix.decompose(reticleRef.current.position, reticleRef.current.quaternion, reticleRef.current.scale);
-      reticleRef.current.visible = true;
+    if (isPresenting && !placed && reticleRef.current) {
+      if (results.length > 0) {
+        reticleRef.current.visible = true;
+        getWorldMatrix(reticleRef.current.matrix, results[0]);
+        reticleRef.current.matrix.decompose(reticleRef.current.position, reticleRef.current.quaternion, reticleRef.current.scale);
+      } else {
+        reticleRef.current.visible = false;
+      }
     }
   }, 'viewer');
 
   const handleSelect = () => {
-    if (reticleRef.current && !placed) {
+    if (reticleRef.current && !placed && reticleRef.current.visible) {
+      setPlacement({
+        position: reticleRef.current.position.clone(),
+        quaternion: reticleRef.current.quaternion.clone()
+      });
       setPlaced(true);
     }
   };
+
+  // Register select event for placement
+  useXREvent('select', handleSelect);
 
   // If not in AR session, show the floating preview
   if (!isPresenting) {
@@ -849,21 +874,36 @@ function ARScene({ model, placed, setPlaced, isPresenting }: { model: React.Reac
   return (
     <>
       {!placed ? (
-        <Interactive onSelect={handleSelect}>
-          <mesh ref={reticleRef} rotation-x={-Math.PI / 2} visible={false}>
+        <group ref={reticleRef} visible={false}>
+          <mesh rotation-x={-Math.PI / 2}>
             <ringGeometry args={[0.1, 0.12, 32]} />
+            <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={2} transparent opacity={0.8} />
+          </mesh>
+          {/* Add a small center dot for better targeting */}
+          <mesh rotation-x={-Math.PI / 2}>
+            <circleGeometry args={[0.02, 32]} />
             <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={2} />
           </mesh>
-        </Interactive>
+        </group>
       ) : (
-        <group>
+        <group 
+          position={placement?.position} 
+          quaternion={placement?.quaternion}
+        >
           <Float speed={2} rotationIntensity={0.5} floatIntensity={0.2}>
             {model}
           </Float>
+          {/* Add a subtle shadow for the placed object */}
+          <ContactShadows 
+            position={[0, 0, 0]}
+            opacity={0.6} 
+            scale={5} 
+            blur={2.5} 
+            far={1} 
+          />
         </group>
       )}
       
-      {/* Lights specifically for AR session */}
       <ambientLight intensity={1} />
       <directionalLight position={[5, 5, 5]} intensity={1.5} />
     </>
@@ -882,15 +922,18 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
   const [currentIndex, setCurrentIndex] = useState(defaultIndex);
   const [placed, setPlaced] = useState(false);
   const [isPresenting, setIsPresenting] = useState(false);
+  const [placement, setPlacement] = useState<{ position: THREE.Vector3, quaternion: THREE.Quaternion } | null>(null);
   const currentItem = MENU_ITEMS[currentIndex];
 
   const nextItem = () => {
     setCurrentIndex((prev) => (prev + 1) % MENU_ITEMS.length);
     setPlaced(false);
+    setPlacement(null);
   };
   const prevItem = () => {
     setCurrentIndex((prev) => (prev - 1 + MENU_ITEMS.length) % MENU_ITEMS.length);
     setPlaced(false);
+    setPlacement(null);
   };
 
   return (
@@ -935,9 +978,16 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
             <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
             <Environment preset="city" />
             
-            <Suspense fallback={null}>
-              <ARScene model={currentItem.model} placed={placed} setPlaced={setPlaced} isPresenting={isPresenting} />
-            </Suspense>
+              <Suspense fallback={null}>
+                <ARScene 
+                  model={currentItem.model} 
+                  placed={placed} 
+                  setPlaced={setPlaced} 
+                  isPresenting={isPresenting}
+                  placement={placement}
+                  setPlacement={setPlacement}
+                />
+              </Suspense>
 
             <OrbitControls enablePan={false} maxPolarAngle={Math.PI / 2.2} />
           </XR>
