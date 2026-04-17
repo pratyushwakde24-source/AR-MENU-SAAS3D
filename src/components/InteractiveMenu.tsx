@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+const MotionDiv = motion.div as any;
 
 const MENU_ITEMS = [
   { id: 0, name: "Truffle Pizza", price: "$24", description: "Black truffle shavings, fior di latte, aged parmesan.", color: "#cf96ff", rating: "4.8", reviews: "124", image: "/items/pizza.png" },
@@ -48,7 +49,7 @@ function MenuCard({ item }: { item: typeof MENU_ITEMS[0] }) {
   }
 
   return (
-    <motion.div
+    <MotionDiv
       style={{
         rotateX,
         rotateY,
@@ -111,7 +112,7 @@ function MenuCard({ item }: { item: typeof MENU_ITEMS[0] }) {
         </div>
 
       </div>
-    </motion.div>
+    </MotionDiv>
   );
 }
 
