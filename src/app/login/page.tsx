@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -194,7 +194,7 @@ export default function AuthPage() {
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/20 group-focus-within:text-primary transition-colors" />
                     <input
                       type="password"
-                      placeholder="••••••••••••"
+                      placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 outline-none focus:border-primary/50 focus:bg-primary/5 transition-all text-sm"
@@ -227,7 +227,7 @@ export default function AuthPage() {
           </div>
           
           <p className="text-center mt-8 text-[10px] text-foreground/20 uppercase font-bold tracking-[0.3em]">
-             Luminary OS v1.0 • Secure Auth
+             Luminary OS v1.0 â€¢ Secure Auth
           </p>
         </MotionDiv>
       </div>

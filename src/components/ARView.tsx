@@ -824,7 +824,7 @@ function ARScene({ model, placed, setPlaced, isPresenting }: { model: React.Reac
       hitMatrix.decompose(reticleRef.current.position, reticleRef.current.quaternion, reticleRef.current.scale);
       reticleRef.current.visible = true;
     }
-  });
+  }, 'viewer');
 
   const handleSelect = () => {
     if (reticleRef.current && !placed) {
