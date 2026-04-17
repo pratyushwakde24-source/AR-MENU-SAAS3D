@@ -836,7 +836,7 @@ function ARScene({
   setPlacement: (p: { position: THREE.Vector3, quaternion: THREE.Quaternion }) => void
 }) {
   const reticleRef = useRef<THREE.Group>(null);
-  const isPresenting = useXR((state) => !!state.session);
+  const isPresenting = useXR((state) => state.isPresenting);
 
   useXRHitTest((results: any, getWorldMatrix: any) => {
     if (!placed && reticleRef.current) {
@@ -872,60 +872,60 @@ function ARScene({
   // Register select event for placement
   useXREvent('select', handleSelect);
 
-  // If not in AR session, show the floating preview
-  if (!isPresenting) {
-    return (
-      <group>
-        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-          {model}
-        </Float>
-        <ContactShadows opacity={0.4} scale={10} blur={2} far={4.5} />
-      </group>
-    );
-  }
-
+  // When not in AR, we show a floating preview.
+  // When in AR, we show the hit-test reticle and the placed model.
   return (
     <>
-      {/* Debug: Always show a red box in front of the user to verify rendering */}
-      {!placed && (
-        <mesh position={[0, 0, -1]}>
-          <boxGeometry args={[0.05, 0.05, 0.05]} />
-          <meshStandardMaterial color="red" emissive="red" />
-        </mesh>
-      )}
-      {!placed ? (
-        <group ref={reticleRef} visible={false}>
-          <mesh rotation-x={-Math.PI / 2}>
-            <ringGeometry args={[0.1, 0.12, 32]} />
-            <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={2} transparent opacity={0.8} />
-          </mesh>
-          {/* Add a small center dot for better targeting */}
-          <mesh rotation-x={-Math.PI / 2}>
-            <circleGeometry args={[0.02, 32]} />
-            <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={2} />
-          </mesh>
-        </group>
-      ) : (
-        <group 
-          position={placement?.position} 
-          quaternion={placement?.quaternion}
-        >
-          <Float speed={2} rotationIntensity={0.5} floatIntensity={0.2}>
+      {/* Debug: Large Yellow Box that should be visible if the scene renders at all */}
+      <mesh position={[0, 0, -2]}>
+        <boxGeometry args={[0.2, 0.2, 0.2]} />
+        <meshStandardMaterial color="yellow" emissive="yellow" />
+      </mesh>
+
+      <ambientLight intensity={0.7} />
+      <pointLight position={[10, 10, 10]} intensity={1} />
+      
+      {!isPresenting ? (
+        <group>
+          <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
             {model}
           </Float>
-          {/* Add a subtle shadow for the placed object */}
-          <ContactShadows 
-            position={[0, 0, 0]}
-            opacity={0.6} 
-            scale={5} 
-            blur={2.5} 
-            far={1} 
-          />
+          <ContactShadows opacity={0.4} scale={10} blur={2} far={4.5} />
         </group>
+      ) : (
+        <>
+          {!placed ? (
+            <group ref={reticleRef} visible={false}>
+              <mesh rotation-x={-Math.PI / 2}>
+                <ringGeometry args={[0.1, 0.12, 32]} />
+                <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={2} transparent opacity={0.8} />
+              </mesh>
+              <mesh rotation-x={-Math.PI / 2}>
+                <circleGeometry args={[0.02, 32]} />
+                <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={2} />
+              </mesh>
+            </group>
+          ) : (
+            <group 
+              position={placement?.position} 
+              quaternion={placement?.quaternion}
+            >
+              <Float speed={2} rotationIntensity={0.5} floatIntensity={0.2}>
+                {model}
+              </Float>
+              <ContactShadows 
+                position={[0, -0.01, 0]}
+                opacity={0.6} 
+                scale={1} 
+                blur={1} 
+                far={10} 
+                resolution={256} 
+                color="#000000"
+              />
+            </group>
+          )}
+        </>
       )}
-      
-      <ambientLight intensity={1} />
-      <directionalLight position={[5, 5, 5]} intensity={1.5} />
     </>
   );
 }
