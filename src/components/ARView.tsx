@@ -14,7 +14,8 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { motion as motion3d } from "framer-motion-3d";
 import { ShoppingBag, ArrowLeft, ArrowRight, Cpu, ZoomIn, RotateCw, Camera } from "lucide-react";
-import { createXRStore, XR, ARButton, useXRHitTest, Interactive } from "@react-three/xr";
+import { createXRStore, XR, ARButton, useXRHitTest, Interactive, useXR } from "@react-three/xr";
+import { useEffect } from "react";
 import * as THREE from "three";
 
 const store = createXRStore();
@@ -819,9 +820,10 @@ const MENU_ITEMS = [
 function ARScene({ model, placed, setPlaced, isPresenting }: { model: React.ReactNode, placed: boolean, setPlaced: (v: boolean) => void, isPresenting: boolean }) {
   const reticleRef = useRef<THREE.Mesh>(null);
 
-  useXRHitTest((hitMatrix: THREE.Matrix4) => {
-    if (isPresenting && !placed && reticleRef.current) {
-      hitMatrix.decompose(reticleRef.current.position, reticleRef.current.quaternion, reticleRef.current.scale);
+  useXRHitTest((results, getWorldMatrix) => {
+    if (isPresenting && !placed && reticleRef.current && results.length > 0) {
+      getWorldMatrix(reticleRef.current.matrix, results[0]);
+      reticleRef.current.matrix.decompose(reticleRef.current.position, reticleRef.current.quaternion, reticleRef.current.scale);
       reticleRef.current.visible = true;
     }
   }, 'viewer');
@@ -868,10 +870,18 @@ function ARScene({ model, placed, setPlaced, isPresenting }: { model: React.Reac
   );
 }
 
+function ARStateSync({ setIsPresenting }: { setIsPresenting: (v: boolean) => void }) {
+  const session = useXR((state) => state.session);
+  useEffect(() => {
+    setIsPresenting(!!session);
+  }, [session, setIsPresenting]);
+  return null;
+}
+
 export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) {
   const [currentIndex, setCurrentIndex] = useState(defaultIndex);
   const [placed, setPlaced] = useState(false);
-  const isPresenting = store.useStore((s: any) => !!s.session);
+  const [isPresenting, setIsPresenting] = useState(false);
   const currentItem = MENU_ITEMS[currentIndex];
 
   const nextItem = () => {
@@ -917,15 +927,15 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
 
       {/* 3D Canvas */}
       <div className="absolute inset-0 z-10 flex items-center justify-center">
-        <Canvas>
+        <Canvas shadows>
           <XR store={store}>
+            <ARStateSync setIsPresenting={setIsPresenting} />
             <PerspectiveCamera makeDefault position={[0, 4, 8]} fov={45} />
             <ambientLight intensity={0.7} />
             <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
             <Environment preset="city" />
             
             <Suspense fallback={null}>
-              {/* Only show ARScene in XR session, otherwise show floating preview */}
               <ARScene model={currentItem.model} placed={placed} setPlaced={setPlaced} isPresenting={isPresenting} />
             </Suspense>
 
