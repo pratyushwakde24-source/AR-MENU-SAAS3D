@@ -18,12 +18,7 @@ import { createXRStore, XR, ARButton, useXRHitTest, Interactive, useXR, useXREve
 import { useEffect } from "react";
 import * as THREE from "three";
 
-const store = createXRStore({
-  sessionInit: {
-    requiredFeatures: ['hit-test', 'local-floor'],
-    optionalFeatures: ['dom-overlay'],
-  }
-});
+const store = createXRStore();
 const MotionDiv = motion.div as any;
 
 function PizzaModel() {
@@ -836,7 +831,7 @@ function ARScene({
   setPlacement: (p: { position: THREE.Vector3, quaternion: THREE.Quaternion }) => void
 }) {
   const reticleRef = useRef<THREE.Group>(null);
-  const isPresenting = useXR((state) => state.isPresenting);
+  const isPresenting = useXR((state) => !!state.session);
 
   useXRHitTest((results: any, getWorldMatrix: any) => {
     if (!placed && reticleRef.current) {
@@ -1105,6 +1100,11 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
             <div className="flex gap-3">
               <ARButton 
                 store={store}
+                sessionInit={{ 
+                  requiredFeatures: ['hit-test', 'local-floor'],
+                  optionalFeatures: ['dom-overlay'],
+                  domOverlay: { root: typeof document !== 'undefined' ? document.body : undefined }
+                }}
                 className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 py-5 rounded-full font-headline font-bold text-white tracking-[0.2em] uppercase text-[10px] shadow-2xl hover:bg-white/20 transition-all flex items-center justify-center gap-2"
               >
                 <Camera className="w-4 h-4 text-primary" />
