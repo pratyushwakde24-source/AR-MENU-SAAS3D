@@ -838,12 +838,21 @@ function ARScene({
   const reticleRef = useRef<THREE.Group>(null);
   const isPresenting = useXR((state) => !!state.session);
 
-  useXRHitTest((results, getWorldMatrix) => {
-    if (isPresenting && !placed && reticleRef.current) {
-      if (results.length > 0) {
+  useXRHitTest((results: any, getWorldMatrix: any) => {
+    if (!placed && reticleRef.current) {
+      // Check for different API signatures in v6
+      if (results && results.length > 0 && results[0]) {
         reticleRef.current.visible = true;
-        getWorldMatrix(reticleRef.current.matrix, results[0]);
+        if (typeof getWorldMatrix === 'function') {
+          getWorldMatrix(reticleRef.current.matrix, results[0]);
+        } else if (results[0].matrix) {
+          reticleRef.current.matrix.copy(results[0].matrix);
+        }
         reticleRef.current.matrix.decompose(reticleRef.current.position, reticleRef.current.quaternion, reticleRef.current.scale);
+      } else if (results instanceof THREE.Matrix4) {
+        // Some versions pass the matrix as the first argument
+        reticleRef.current.visible = true;
+        results.decompose(reticleRef.current.position, reticleRef.current.quaternion, reticleRef.current.scale);
       } else {
         reticleRef.current.visible = false;
       }
@@ -877,6 +886,13 @@ function ARScene({
 
   return (
     <>
+      {/* Debug: Always show a red box in front of the user to verify rendering */}
+      {!placed && (
+        <mesh position={[0, 0, -1]}>
+          <boxGeometry args={[0.05, 0.05, 0.05]} />
+          <meshStandardMaterial color="red" emissive="red" />
+        </mesh>
+      )}
       {!placed ? (
         <group ref={reticleRef} visible={false}>
           <mesh rotation-x={-Math.PI / 2}>
