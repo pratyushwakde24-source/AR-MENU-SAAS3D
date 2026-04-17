@@ -2,6 +2,9 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+const MotionDiv = motion.div as any;
+const MotionH1 = motion.h1 as any;
+const MotionP = motion.p as any;
 import Hero3D from "./Hero3D";
 
 export default function Hero() {
@@ -16,7 +19,7 @@ export default function Hero() {
       <Hero3D />
 
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -26,9 +29,9 @@ export default function Hero() {
           <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary">
             Next-Gen Restaurant Tech
           </span>
-        </motion.div>
+        </MotionDiv>
 
-        <motion.h1
+        <MotionH1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -38,9 +41,9 @@ export default function Hero() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary neon-text-primary">
             3D AR Experience
           </span>
-        </motion.h1>
+        </MotionH1>
 
-        <motion.p
+        <MotionP
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -48,9 +51,9 @@ export default function Hero() {
         >
           Let customers see food on their table before ordering. Boost conversion
           rates and engagement with premium Augmented Reality visualization.
-        </motion.p>
+        </MotionP>
 
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
@@ -62,9 +65,9 @@ export default function Hero() {
           <button className="w-full sm:w-auto glass text-foreground px-10 py-5 rounded-full font-headline font-bold text-sm tracking-widest uppercase hover:bg-white/10 active:scale-95 transition-all">
             Try Live Demo
           </button>
-        </motion.div>
+        </MotionDiv>
 
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
@@ -81,18 +84,18 @@ export default function Hero() {
              <span className="text-xl font-bold">BISTRO_</span>
 
           </div>
-        </motion.div>
+        </MotionDiv>
       </div>
       
       {/* Scroll Indicator */}
-      <motion.div 
+      <MotionDiv 
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30"
       >
         <span className="text-[8px] uppercase tracking-widest">Scroll</span>
         <div className="w-[1px] h-10 bg-gradient-to-b from-primary to-transparent" />
-      </motion.div>
+      </MotionDiv>
     </section>
   );
 }

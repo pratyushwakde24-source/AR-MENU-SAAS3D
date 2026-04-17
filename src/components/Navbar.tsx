@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+const MotionButton = motion.button as any;
 import Link from "next/link";
 
 export default function Navbar() {
@@ -33,20 +34,20 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <motion.button
+          <MotionButton
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="hidden sm:block text-xs font-bold uppercase tracking-widest text-primary/80"
           >
             Login
-          </motion.button>
-          <motion.button
+          </MotionButton>
+          <MotionButton
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-primary text-background px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(207,150,255,0.4)] hover:brightness-110 transition-all"
           >
             Get Started
-          </motion.button>
+          </MotionButton>
         </div>
       </nav>
     </header>

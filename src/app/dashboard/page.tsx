@@ -17,6 +17,7 @@ import {
   Lock
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+const MotionDiv = motion.div as any;
 import { supabase } from "@/lib/supabase";
 import { useProfile } from "@/lib/useProfile";
 import Link from "next/link";
@@ -119,7 +120,7 @@ export default function Dashboard() {
       <main className="flex-grow p-6 lg:p-10 max-w-7xl mx-auto space-y-10 overflow-y-auto">
         {/* Subscription Alert */}
         {!isSubscribed && (
-          <motion.div 
+          <MotionDiv 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="p-4 bg-primary/10 border border-primary/30 rounded-2xl flex items-center justify-between gap-4"
@@ -134,7 +135,7 @@ export default function Dashboard() {
             <Link href="/pricing" className="px-6 py-2 bg-primary text-background rounded-xl text-xs font-bold uppercase tracking-widest">
                Renew
             </Link>
-          </motion.div>
+          </MotionDiv>
         )}
 
         {/* Header */}
@@ -155,7 +156,7 @@ export default function Dashboard() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, idx) => (
-            <motion.div
+            <MotionDiv
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -170,7 +171,7 @@ export default function Dashboard() {
               </div>
               <p className="text-foreground/40 text-xs font-bold uppercase tracking-wider mb-1">{stat.label}</p>
               <p className="text-2xl font-headline font-bold">{stat.value}</p>
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
 
@@ -189,7 +190,7 @@ export default function Dashboard() {
               </div>
               <div className="h-64 flex items-end gap-3 px-4">
                  {[40, 60, 45, 90, 75, 40, 100, 55, 80].map((h, i) => (
-                   <motion.div 
+                   <MotionDiv 
                     key={i}
                     initial={{ height: 0 }}
                     animate={{ height: `${h}%` }}
@@ -199,7 +200,7 @@ export default function Dashboard() {
                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-surface p-2 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">
                        {h*120} views
                      </div>
-                   </motion.div>
+                   </MotionDiv>
                  ))}
               </div>
            </div>

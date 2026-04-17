@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+const MotionDiv = motion.div as any;
 import { Check, Loader2, Zap } from "lucide-react";
 import { useProfile } from "@/lib/useProfile";
 import { useRouter } from "next/navigation";
@@ -123,7 +124,7 @@ export default function Pricing() {
               onClick={() => setIsYearly(!isYearly)}
               className="w-14 h-8 bg-surface-bright rounded-full p-1 relative transition-colors"
             >
-              <motion.div 
+              <MotionDiv 
                 animate={{ x: isYearly ? 24 : 0 }}
                 className="w-6 h-6 bg-primary rounded-full shadow-[0_0_10px_rgba(207,150,255,0.5)]"
               />
@@ -134,7 +135,7 @@ export default function Pricing() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {plans.map((plan, idx) => (
-            <motion.div
+            <MotionDiv
               key={plan.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -187,7 +188,7 @@ export default function Pricing() {
                   </>
                 )}
               </button>
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       </div>

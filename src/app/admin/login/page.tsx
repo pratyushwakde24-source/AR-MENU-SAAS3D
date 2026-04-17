@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+const MotionDiv = motion.div as any;
 import { ShieldCheck, Lock, Mail, ArrowRight, Loader2 } from "lucide-react";
 
 export default function AdminLogin() {
@@ -52,7 +53,7 @@ export default function AdminLogin() {
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[150px] translate-y-1/2 -translate-x-1/2" />
 
-      <motion.div
+      <MotionDiv
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md z-10"
@@ -102,13 +103,13 @@ export default function AdminLogin() {
             </div>
 
             {error && (
-              <motion.div
+              <MotionDiv
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="bg-red-500/10 border border-red-500/20 text-red-500 text-xs p-4 rounded-xl text-center font-bold"
               >
                 {error}
-              </motion.div>
+              </MotionDiv>
             )}
 
             <button
@@ -131,7 +132,7 @@ export default function AdminLogin() {
         <p className="text-center mt-10 text-[10px] text-foreground/20 uppercase font-bold tracking-[0.3em]">
           Secure Environment • Encrypted Channel
         </p>
-      </motion.div>
+      </MotionDiv>
     </div>
   );
 }

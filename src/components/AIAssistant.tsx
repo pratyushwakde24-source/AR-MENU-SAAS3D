@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+const MotionDiv = motion.div as any;
+const MotionButton = motion.button as any;
 import { Sparkles, X, Send, Bot } from "lucide-react";
 
 export default function AIAssistant() {
@@ -46,7 +48,7 @@ export default function AIAssistant() {
     <div className="fixed bottom-10 right-10 z-[100]">
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -114,18 +116,18 @@ export default function AIAssistant() {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </MotionDiv>
         )}
       </AnimatePresence>
 
-      <motion.button
+      <MotionButton
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
         className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-dim flex items-center justify-center shadow-[0_0_30px_rgba(207,150,255,0.4)] group"
       >
         <Sparkles className="w-8 h-8 text-background group-hover:rotate-12 transition-transform" />
-      </motion.button>
+      </MotionButton>
     </div>
   );
 }
