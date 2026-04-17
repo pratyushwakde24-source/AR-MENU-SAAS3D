@@ -15,8 +15,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { motion as motion3d } from "framer-motion-3d";
 import { ShoppingBag, ArrowLeft, ArrowRight, Cpu, ZoomIn, RotateCw, Camera } from "lucide-react";
 import { createXRStore, XR, ARButton, useXRHitTest, Interactive, useXR, useXREvent } from "@react-three/xr";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as THREE from "three";
+
+// Dynamically import model-viewer for client-side only
+if (typeof window !== "undefined") {
+  import("@google/model-viewer");
+}
+
+// Add TypeScript support for model-viewer
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'model-viewer': any;
+    }
+  }
+}
 
 const store = createXRStore();
 const MotionDiv = motion.div as any;
@@ -795,26 +809,26 @@ function LobsterModel() {
 
 
 const MENU_ITEMS = [
-  { id: 0, name: "Truffle Pizza", price: "$24", description: "Black truffle shavings, fior di latte, aged parmesan.", model: <PizzaModel />, color: "#cf96ff", rating: "4.8", reviews: "124", image: "/items/pizza.png" },
-  { id: 1, name: "Paneer Butter Masala", price: "$18", description: "Soft paneer cubes in a rich, creamy tomato and butter gravy.", model: <PaneerButterMasalaModel />, color: "#ff9f1c", rating: "4.9", reviews: "210", image: "/items/paneer_butter_masala.png" },
-  { id: 2, name: "Matcha Dessert", price: "$14", description: "Organic premium matcha mousse, white chocolate ganache.", model: <MatchaDessertModel />, color: "#ffd16c", rating: "4.7", reviews: "86", image: "/items/matcha.png" },
-  { id: 3, name: "Paneer Tikka", price: "$20", description: "Hand-crafted cottage cheese marinated in yogurt and spices.", model: <PaneerTikkaModel />, color: "#ff9f1c", rating: "4.9", reviews: "342", image: "/items/paneer_tikka.png" },
-  { id: 4, name: "Butter Chicken", price: "$22", description: "Tender chicken pieces simmered in a velvety tomato gravy.", model: <ButterChickenModel />, color: "#d00000", rating: "5.0", reviews: "512", image: "/items/butter_chicken.png" },
-  { id: 5, name: "Sushi Platter", price: "$28", description: "Fresh Atlantic salmon, seasoned rice, and nori with wasabi.", model: <SushiModel />, color: "#ff4d6d", rating: "4.9", reviews: "156", image: "/items/sushi.png" },
-  { id: 6, name: "Chole Bhature", price: "$16", description: "Spicy chickpeas served with fluffy, deep-fried puffed bread.", model: <CholeBhatureModel />, color: "#ee9b00", rating: "4.8", reviews: "156", image: "/items/chole_bhature.png" },
-  { id: 7, name: "Hyderabadi Biryani", price: "$24", description: "Fragrant basmati rice layered with spiced meat and saffron.", model: <BiryaniModel />, color: "#fca311", rating: "5.0", reviews: "820", image: "/items/biryani.png" },
-  { id: 8, name: "Crispy Samosas", price: "$10", description: "Triangular pastry filled with spiced potatoes and peas.", model: <SamosaModel />, color: "#ee9b00", rating: "4.8", reviews: "420", image: "/items/samosa.png" },
-  { id: 9, name: "Malai Kofta", price: "$19", description: "Fried potato and paneer dumplings in a rich, creamy golden gravy.", model: <MalaiKoftaModel />, color: "#ffd16c", rating: "4.8", reviews: "235", image: "/items/malai_kofta.png" },
-  { id: 10, name: "Lamb Rogan Josh", price: "$45", description: "Kashmiri style lamb curry with aromatic spices and red chili.", model: <LambRoganJoshModel />, color: "#9b2226", rating: "4.9", reviews: "128", image: "/items/lamb_rogan_josh.png" },
-  { id: 11, name: "Blueberry Pancakes", price: "$15", description: "Fluffy stack of pancakes served with maple syrup and butter.", model: <PancakeModel />, color: "#4895ef", rating: "4.5", reviews: "167", image: "/items/pancakes.png" },
-  { id: 12, name: "Dal Makhani", price: "$21", description: "Slow-cooked black lentils with butter, cream, and spices.", model: <DalMakhaniModel />, color: "#432818", rating: "4.9", reviews: "312", image: "/items/dal_makhani.png" },
-  { id: 13, name: "Greek Salad", price: "$14", description: "Fresh cucumbers, olives, feta cheese, and balsamic glaze.", model: <SaladModel />, color: "#70e000", rating: "4.4", reviews: "89", image: "/items/salad.png" },
-  { id: 14, name: "Chocolate Fudge", price: "$12", description: "Decadent dark chocolate cake with a molten lava center.", model: <ChocolateCakeModel />, color: "#2b1a10", rating: "4.9", reviews: "453", image: "/items/cake.png" },
-  { id: 15, name: "Masala Dosa", price: "$16", description: "Thin rice crepe filled with tempered potato masala.", model: <DosaModel />, color: "#d4a373", rating: "4.8", reviews: "654", image: "/items/dosa.png" },
-  { id: 16, name: "Fish & Chips", price: "$18", description: "Beer-battered cod served with chunky fries and tartar sauce.", model: <FishChipsModel />, color: "#ffb703", rating: "4.7", reviews: "219", image: "/items/fish_chips.png" },
-  { id: 17, name: "Tandoori Chicken", price: "$22", description: "Clay-oven roasted chicken marinated in spicy yogurt.", model: <TandooriChickenModel />, color: "#ae2012", rating: "4.9", reviews: "387", image: "/items/tandoori.png" },
-  { id: 18, name: "Gulab Jamun", price: "$8", description: "Soft milk solids dumplings soaked in cardamom syrup.", model: <GulabJamunModel />, color: "#9b2226", rating: "5.0", reviews: "943", image: "/items/gulab_jamun.png" },
-  { id: 19, name: "Grilled Lobster", price: "$52", description: "Whole lobster grilled with garlic butter and herbs.", model: <LobsterModel />, color: "#e63946", rating: "4.8", reviews: "76", image: "/items/lobster.png" },
+  { id: 0, name: "Truffle Pizza", price: "$24", description: "Black truffle shavings, fior di latte, aged parmesan.", model: <PizzaModel />, color: "#cf96ff", rating: "4.8", reviews: "124", image: "/items/pizza.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 1, name: "Paneer Butter Masala", price: "$18", description: "Soft paneer cubes in a rich, creamy tomato and butter gravy.", model: <PaneerButterMasalaModel />, color: "#ff9f1c", rating: "4.9", reviews: "210", image: "/items/paneer_butter_masala.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 2, name: "Matcha Dessert", price: "$14", description: "Organic premium matcha mousse, white chocolate ganache.", model: <MatchaDessertModel />, color: "#ffd16c", rating: "4.7", reviews: "86", image: "/items/matcha.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 3, name: "Paneer Tikka", price: "$20", description: "Hand-crafted cottage cheese marinated in yogurt and spices.", model: <PaneerTikkaModel />, color: "#ff9f1c", rating: "4.9", reviews: "342", image: "/items/paneer_tikka.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 4, name: "Butter Chicken", price: "$22", description: "Tender chicken pieces simmered in a velvety tomato gravy.", model: <ButterChickenModel />, color: "#d00000", rating: "5.0", reviews: "512", image: "/items/butter_chicken.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 5, name: "Sushi Platter", price: "$28", description: "Fresh Atlantic salmon, seasoned rice, and nori with wasabi.", model: <SushiModel />, color: "#ff4d6d", rating: "4.9", reviews: "156", image: "/items/sushi.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 6, name: "Chole Bhature", price: "$16", description: "Spicy chickpeas served with fluffy, deep-fried puffed bread.", model: <CholeBhatureModel />, color: "#ee9b00", rating: "4.8", reviews: "156", image: "/items/chole_bhature.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 7, name: "Hyderabadi Biryani", price: "$24", description: "Fragrant basmati rice layered with spiced meat and saffron.", model: <BiryaniModel />, color: "#fca311", rating: "5.0", reviews: "820", image: "/items/biryani.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 8, name: "Crispy Samosas", price: "$10", description: "Triangular pastry filled with spiced potatoes and peas.", model: <SamosaModel />, color: "#ee9b00", rating: "4.8", reviews: "420", image: "/items/samosa.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 9, name: "Malai Kofta", price: "$19", description: "Fried potato and paneer dumplings in a rich, creamy golden gravy.", model: <MalaiKoftaModel />, color: "#ffd16c", rating: "4.8", reviews: "235", image: "/items/malai_kofta.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 10, name: "Lamb Rogan Josh", price: "$45", description: "Kashmiri style lamb curry with aromatic spices and red chili.", model: <LambRoganJoshModel />, color: "#9b2226", rating: "4.9", reviews: "128", image: "/items/lamb_rogan_josh.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 11, name: "Blueberry Pancakes", price: "$15", description: "Fluffy stack of pancakes served with maple syrup and butter.", model: <PancakeModel />, color: "#4895ef", rating: "4.5", reviews: "167", image: "/items/pancakes.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 12, name: "Dal Makhani", price: "$21", description: "Slow-cooked black lentils with butter, cream, and spices.", model: <DalMakhaniModel />, color: "#432818", rating: "4.9", reviews: "312", image: "/items/dal_makhani.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 13, name: "Greek Salad", price: "$14", description: "Fresh cucumbers, olives, feta cheese, and balsamic glaze.", model: <SaladModel />, color: "#70e000", rating: "4.4", reviews: "89", image: "/items/salad.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 14, name: "Chocolate Fudge", price: "$12", description: "Decadent dark chocolate cake with a molten lava center.", model: <ChocolateCakeModel />, color: "#2b1a10", rating: "4.9", reviews: "453", image: "/items/cake.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 15, name: "Masala Dosa", price: "$16", description: "Thin rice crepe filled with tempered potato masala.", model: <DosaModel />, color: "#d4a373", rating: "4.8", reviews: "654", image: "/items/dosa.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 16, name: "Fish & Chips", price: "$18", description: "Beer-battered cod served with chunky fries and tartar sauce.", model: <FishChipsModel />, color: "#ffb703", rating: "4.7", reviews: "219", image: "/items/fish_chips.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 17, name: "Tandoori Chicken", price: "$22", description: "Clay-oven roasted chicken marinated in spicy yogurt.", model: <TandooriChickenModel />, color: "#ae2012", rating: "4.9", reviews: "387", image: "/items/tandoori.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 18, name: "Gulab Jamun", price: "$8", description: "Soft milk solids dumplings soaked in cardamom syrup.", model: <GulabJamunModel />, color: "#9b2226", rating: "5.0", reviews: "943", image: "/items/gulab_jamun.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
+  { id: 19, name: "Grilled Lobster", price: "$52", description: "Whole lobster grilled with garlic butter and herbs.", model: <LobsterModel />, color: "#e63946", rating: "4.8", reviews: "76", image: "/items/lobster.png", glbUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb" },
 ];
 
 function ARScene({ 
@@ -925,6 +939,55 @@ function ARScene({
   );
 }
 
+function NativeARViewer({ 
+  glbUrl, 
+  isOpen, 
+  onClose 
+}: { 
+  glbUrl: string, 
+  isOpen: boolean, 
+  onClose: () => void 
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[2000] bg-black">
+      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-[2001] w-full px-6 flex justify-between items-center">
+        <button 
+          onClick={onClose}
+          className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20"
+        >
+          <ArrowLeft className="w-5 h-5 text-white" />
+        </button>
+        <div className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold tracking-widest uppercase">
+          AR Mode
+        </div>
+        <div className="w-10 h-10" /> {/* Spacer */}
+      </div>
+
+      <model-viewer
+        src={glbUrl}
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        ar-placement="floor"
+        camera-controls
+        touch-action="none"
+        shadow-intensity="1"
+        shadow-softness="1"
+        autoplay
+        auto-rotate
+        style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}
+      >
+        <div slot="ar-button" className="absolute bottom-12 left-1/2 -translate-x-1/2">
+          <button className="bg-primary px-8 py-4 rounded-full text-background font-bold uppercase tracking-widest text-xs shadow-2xl active:scale-95 transition-transform">
+            Place in Your Space
+          </button>
+        </div>
+      </model-viewer>
+    </div>
+  );
+}
+
 function ARStateSync({ setIsPresenting }: { setIsPresenting: (v: boolean) => void }) {
   const session = useXR((state) => state.session);
   useEffect(() => {
@@ -938,6 +1001,8 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
   const [placed, setPlaced] = useState(false);
   const [isPresenting, setIsPresenting] = useState(false);
   const [placement, setPlacement] = useState<{ position: THREE.Vector3, quaternion: THREE.Quaternion } | null>(null);
+  const [isNativeAROpen, setIsNativeAROpen] = useState(false);
+  
   const currentItem = MENU_ITEMS[currentIndex];
 
   const nextItem = () => {
@@ -1098,18 +1163,19 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
            </div>
 
             <div className="flex gap-3">
-              <ARButton 
-                store={store}
-                sessionInit={{ 
-                  requiredFeatures: ['hit-test', 'local-floor'],
-                  optionalFeatures: ['dom-overlay'],
-                  domOverlay: { root: typeof document !== 'undefined' ? document.body : undefined }
-                }}
+              <button 
+                onClick={() => setIsNativeAROpen(true)}
                 className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 py-5 rounded-full font-headline font-bold text-white tracking-[0.2em] uppercase text-[10px] shadow-2xl hover:bg-white/20 transition-all flex items-center justify-center gap-2"
               >
                 <Camera className="w-4 h-4 text-primary" />
                 Start AR View
-              </ARButton>
+              </button>
+              
+              <NativeARViewer 
+                glbUrl={currentItem.glbUrl} 
+                isOpen={isNativeAROpen} 
+                onClose={() => setIsNativeAROpen(false)} 
+              />
 
               <button className="flex-1 bg-gradient-to-r from-primary to-primary-dim py-5 rounded-full font-headline font-bold text-background tracking-[0.2em] uppercase text-[10px] shadow-[0_0_40px_rgba(207,150,255,0.4)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2">
                 <ShoppingBag className="w-4 h-4" />
