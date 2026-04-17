@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #cf96ff;
+  --color-primary-dim: #a533ff;
+  --color-secondary: #00e3fd;
+  --color-secondary-dim: #00d4ec;
+  --color-tertiary: #ffd16c;
+  --color-background: #0d0e12;
+  --color-surface: #0d0e12;
+  --color-surface-bright: #2a2c32;
+  --color-surface-container: #18191e;
+  
+  --font-headline: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  
+  --animate-glow-pulse: glow-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50% { opacity: 0.8; filter: brightness(1.5) blur(2px); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+}
+
+:root {
+  --background: #0d0e12;
+  --foreground: #faf8fe;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", sans-serif;
+  @apply selection:bg-primary/30;
+}
+
+.glass {
+  background: rgba(36, 37, 43, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(71, 72, 76, 0.15);
+}
+
+.neon-border {
+  border: 1px solid rgba(207, 150, 255, 0.3);
+  box-shadow: 0 0 15px rgba(207, 150, 255, 0.1);
+}
+
+.neon-text-primary {
+  text-shadow: 0 0 10px rgba(207, 150, 255, 0.5);
+}
+
+.neon-text-secondary {
+  text-shadow: 0 0 10px rgba(0, 227, 253, 0.5);
+}
+
+.ar-glow {
+  box-shadow: 0 0 30px rgba(157, 0, 255, 0.15);
+}
+
+.shadow-3d {
+  filter: blur(12px);
+  background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0e12;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #24252b;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cf96ff;
+}

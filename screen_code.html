@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luminary AR View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#a70138",
+                        "inverse-on-surface": "#54555a",
+                        "tertiary-fixed-dim": "#ecb200",
+                        "on-tertiary-container": "#553e00",
+                        "on-primary-container": "#37005f",
+                        "secondary-fixed": "#26e6ff",
+                        "tertiary": "#ffd16c",
+                        "primary": "#cf96ff",
+                        "on-secondary-fixed": "#003a42",
+                        "outline-variant": "#47484c",
+                        "on-background": "#faf8fe",
+                        "on-primary-fixed": "#000000",
+                        "surface-container-high": "#1e1f25",
+                        "primary-fixed-dim": "#bc6fff",
+                        "surface-container-low": "#121318",
+                        "surface": "#0d0e12",
+                        "on-secondary": "#004d57",
+                        "on-error-container": "#ffb2b9",
+                        "on-error": "#490013",
+                        "inverse-primary": "#8d00e6",
+                        "on-tertiary-fixed": "#3d2b00",
+                        "on-surface-variant": "#abaab0",
+                        "tertiary-container": "#fdc003",
+                        "outline": "#75757a",
+                        "primary-dim": "#a533ff",
+                        "surface-bright": "#2a2c32",
+                        "secondary-container": "#006875",
+                        "tertiary-fixed": "#fdc003",
+                        "surface-variant": "#24252b",
+                        "primary-container": "#c683ff",
+                        "surface-container": "#18191e",
+                        "on-surface": "#faf8fe",
+                        "surface-container-highest": "#24252b",
+                        "surface-dim": "#0d0e12",
+                        "on-secondary-fixed-variant": "#005964",
+                        "on-primary": "#480079",
+                        "on-primary-fixed-variant": "#450074",
+                        "secondary": "#00e3fd",
+                        "on-tertiary": "#604700",
+                        "tertiary-dim": "#ecb200",
+                        "inverse-surface": "#faf8fe",
+                        "secondary-fixed-dim": "#00d7f0",
+                        "on-tertiary-fixed-variant": "#604700",
+                        "surface-container-lowest": "#000000",
+                        "error": "#ff6e84",
+                        "error-dim": "#d73357",
+                        "secondary-dim": "#00d4ec",
+                        "surface-tint": "#cf96ff",
+                        "on-secondary-container": "#e8fbff",
+                        "primary-fixed": "#c683ff",
+                        "background": "#0d0e12"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(36, 37, 43, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(71, 72, 76, 0.15);
+        }
+        .ar-glow {
+            box-shadow: 0 0 30px rgba(157, 0, 255, 0.15);
+        }
+        .shadow-3d {
+            filter: blur(12px);
+            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-dim text-on-surface font-body selection:bg-primary/30 overflow-hidden h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0d0e12]/40 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(157,0,255,0.1)] flex justify-between items-center px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#9D00FF]">blur_on</span>
+<h1 class="text-2xl font-bold tracking-tighter text-[#faf8fe] font-['Space_Grotesk']">LUMINARY AR</h1>
+</div>
+<div class="w-10 h-10 rounded-full border border-[#9D00FF]/30 overflow-hidden p-0.5">
+<img alt="User Profile" class="w-full h-full object-cover rounded-full" data-alt="Close-up portrait of a professional man with clean lighting and neutral background, high resolution photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIx-iN5aiG_v0OeVe2TNpgMddI1X9bJ-Ru9ekh2OLWKaTFWCsIJejrOjvW778FMW7SGNmancJE5uq7iZJ_xhTMoM4Rvq8psrxckYbL1Via3yk-0cymPN6ktSEoff04ttB0Dkzl9m66GWHqmOHwEOalzj3lQH3V0Svl8raJttzHg7pWyCQ8WzycoTXDEZiu8sLYKPrW0AUC473kEuHTk3ocBRnQfAZ5tOW0j4SqAWPTmH-y9ukNAdan8BSz1AcdpUhY4P7kugxIvVV1"/>
+</div>
+</header>
+<!-- Main AR Canvas -->
+<main class="relative flex-grow w-full h-full pt-16 pb-24 overflow-hidden">
+<!-- Camera Background (The World) -->
+<div class="absolute inset-0 z-0">
+<img alt="Interior of a modern high-end restaurant table" class="w-full h-full object-cover grayscale-[0.2] brightness-[0.7]" data-alt="Interior of a modern high-end restaurant with a dark wood table top in the foreground and soft bokeh restaurant lighting in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeAo6sKByqbEXO25SdzPNMLFW7yLDnRAq02W6W51tDFENj9WQp-1R0ev1y1ik668AUbbYDxOgDyO4v04ObbL-hzyGpQfWyJgQq7Cl7n5c0Sif2nLyCFToe3drcHbxS2zTrLW0MMuAOqkvRNStSVmNSGPayubtYbaSYFC6sIeD5HfNVeqwsxMaoqC0XtzU2ALYn-dEVLSOctSI2gQfQcrX0RiSw2ysGz2aDmc9cAmGBFFXdx_3ZCTaGtkmi2KedncNaSKx2sz5Hsii0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/20"></div>
+</div>
+<!-- AR Model Simulation Container -->
+<div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+<div class="relative w-80 h-80 flex items-center justify-center transition-transform duration-1000 scale-110">
+<!-- 3D Shadow -->
+<div class="absolute bottom-4 w-64 h-16 shadow-3d rounded-full"></div>
+<!-- Pizza Model -->
+<div class="relative transform hover:scale-105 transition-transform duration-500">
+<img alt="Gourmet Truffle Pizza" class="w-72 h-72 object-cover rounded-full shadow-2xl border-4 border-white/5" data-alt="Aerial view of a gourmet artisanal pizza with dark truffle shavings, melted mozzarella, and fresh herbs on a charred crust" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC2FVIqHlCeLqrhEtibvYLu_zggJfEvPQNShcHyVgKj6Lm1GU4WCLy6dgj-_TZZBl6Oud8sP_okmQC_A5kMk1dC1KWFsOO12yHouO3xgONtLJK0Sug-1rVfn0Yfx0CFVqiNl0INvWSwIxhum7k_02_ic07cVkJMvfe6X-oUq5YW8CIW-5pa9-sDt_EDOHy8TghXw9c2MshrrQhzJ462aB9DF8TOkqv-90UPr_PkIzDvgCMs7q4u398X2jUewM6ps6vo75Gb2R0n3GK"/>
+<!-- AR Markers -->
+<div class="absolute -top-4 -left-4 w-8 h-8 border-t-2 border-l-2 border-secondary rounded-tl-lg"></div>
+<div class="absolute -top-4 -right-4 w-8 h-8 border-t-2 border-r-2 border-secondary rounded-tr-lg"></div>
+<div class="absolute -bottom-4 -left-4 w-8 h-8 border-b-2 border-l-2 border-secondary rounded-bl-lg"></div>
+<div class="absolute -bottom-4 -right-4 w-8 h-8 border-b-2 border-r-2 border-secondary rounded-br-lg"></div>
+</div>
+<!-- Floating Data Tag -->
+<div class="absolute -top-12 right-0 glass-panel px-4 py-2 rounded-xl flex items-center gap-2 border-l-2 border-secondary animate-pulse">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">sensors</span>
+<span class="text-[10px] font-headline tracking-widest text-secondary font-bold uppercase">Tracking Active</span>
+</div>
+</div>
+</div>
+<!-- UI Overlay Controls -->
+<div class="absolute inset-0 z-20 flex flex-col justify-between p-6 pointer-events-none">
+<!-- Top Interaction Prompt -->
+<div class="flex justify-center mt-4">
+<div class="glass-panel px-6 py-2 rounded-full flex items-center gap-4 border border-white/5 shadow-2xl">
+<div class="flex items-center gap-2 text-on-surface/60 text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">pinch</span>
+<span>Pinch to zoom</span>
+</div>
+<div class="w-[1px] h-3 bg-white/10"></div>
+<div class="flex items-center gap-2 text-on-surface/60 text-[10px] uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">swipe</span>
+<span>Swipe to rotate</span>
+</div>
+</div>
+</div>
+<!-- Bottom Content Card -->
+<div class="w-full max-w-md mx-auto space-y-6 pointer-events-auto">
+<!-- Navigation & Info -->
+<div class="flex items-center justify-between gap-4">
+<button class="w-12 h-12 flex items-center justify-center rounded-full glass-panel border border-white/10 text-on-surface/80 active:scale-90 transition-all hover:bg-white/5">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<div class="flex-grow glass-panel p-6 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="text-2xl font-headline font-bold text-tertiary">$24</span>
+</div>
+<h2 class="text-xl font-headline font-bold text-on-surface tracking-tight mb-1">Premium Truffle Pizza</h2>
+<p class="text-on-surface/50 text-xs font-light">Black truffle, fior di latte, aged parmesan, truffle oil infusion.</p>
+<div class="mt-4 flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star_half</span>
+<span class="text-[10px] text-on-surface/40 ml-2 uppercase tracking-tighter">4.8 (124 reviews)</span>
+</div>
+</div>
+<button class="w-12 h-12 flex items-center justify-center rounded-full glass-panel border border-white/10 text-on-surface/80 active:scale-90 transition-all hover:bg-white/5">
+<span class="material-symbols-outlined">arrow_forward_ios</span>
+</button>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-gradient-to-r from-primary to-primary-dim py-5 rounded-full font-headline font-bold text-on-primary-fixed tracking-widest uppercase text-sm shadow-[0_0_30px_rgba(157,0,255,0.4)] hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-xl">shopping_bag</span>
+                    Order Now
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-[2rem] bg-[#121318]/60 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] flex justify-around items-center h-20 px-4 pb-safe">
+<a class="flex flex-col items-center justify-center text-[#faf8fe]/40 hover:text-[#cf96ff] transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">restaurant_menu</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#00e3fd] bg-[#00e3fd]/10 rounded-full px-4 py-1 border border-[#00e3fd]/20 transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">view_in_ar</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest font-bold">AR View</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#faf8fe]/40 hover:text-[#cf96ff] transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">insights</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Insights</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#faf8fe]/40 hover:text-[#cf96ff] transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Orders</span>
+</a>
+</nav>
+<!-- HUD Elements / Decorations -->
+<div class="fixed top-24 left-6 z-30 pointer-events-none space-y-4">
+<div class="h-32 w-1 glass-panel relative overflow-hidden rounded-full">
+<div class="absolute top-0 w-full h-1/2 bg-secondary shadow-[0_0_10px_#00e3fd]"></div>
+</div>
+<div class="text-[8px] font-label text-secondary uppercase tracking-[0.3em] vertical-rl rotate-180">Signal Intensity</div>
+</div>
+<div class="fixed top-24 right-6 z-30 pointer-events-none text-right">
+<div class="glass-panel p-3 rounded-xl border border-white/5 space-y-2">
+<div class="flex items-center justify-end gap-2">
+<span class="text-[10px] text-on-surface/40 font-label tracking-widest">LENS_01</span>
+<div class="w-1 h-1 rounded-full bg-secondary"></div>
+</div>
+<div class="flex items-center justify-end gap-2">
+<span class="text-[10px] text-on-surface/40 font-label tracking-widest">FOV 85°</span>
+<div class="w-1 h-1 rounded-full bg-secondary"></div>
+</div>
+<div class="flex items-center justify-end gap-2">
+<span class="text-[10px] text-on-surface/40 font-label tracking-widest">60 FPS</span>
+<div class="w-1 h-1 rounded-full bg-tertiary"></div>
+</div>
+</div>
+</div>
+</body></html>
