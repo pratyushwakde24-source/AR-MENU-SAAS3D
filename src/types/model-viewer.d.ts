@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 declare global {
   namespace JSX {
@@ -19,8 +19,17 @@ declare global {
   }
 }
 
-// Support for newer React JSX namespace
-declare namespace React.JSX {
+// For newer versions of React (like React 19)
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      'model-viewer': any;
+    }
+  }
+}
+
+// For standard JSX namespace
+declare namespace JSX {
   interface IntrinsicElements {
     'model-viewer': any;
   }
