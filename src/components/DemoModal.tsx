@@ -4,6 +4,8 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Play, Scan, MousePointer2, Camera } from "lucide-react";
 
+const MotionDiv = motion.div as any;
+
 interface DemoModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -15,7 +17,7 @@ export default function DemoModal({ isOpen, onClose }: DemoModalProps) {
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -24,7 +26,7 @@ export default function DemoModal({ isOpen, onClose }: DemoModalProps) {
           />
 
           {/* Modal Container */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -78,12 +80,13 @@ export default function DemoModal({ isOpen, onClose }: DemoModalProps) {
                 <h4 className="text-[10px] uppercase tracking-[0.4em] font-bold text-primary mb-8">How it Works</h4>
                 
                 <div className="space-y-10">
+                  {/* @ts-ignore */}
                   {[
                     { icon: <Scan className="w-5 h-5" />, title: "Scan QR", desc: "User scans the unique QR code on their table using their phone camera." },
                     { icon: <MousePointer2 className="w-5 h-5" />, title: "Choose Dish", desc: "The interactive 3D menu opens instantly. Select any dish to explore." },
                     { icon: <Camera className="w-5 h-5" />, title: "Start AR", desc: "Click 'Start AR View' to project the life-sized dish onto the table." }
                   ].map((step, i) => (
-                    <motion.div 
+                    <MotionDiv 
                       key={i}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -109,7 +112,7 @@ export default function DemoModal({ isOpen, onClose }: DemoModalProps) {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </MotionDiv>
         </>
       )}
     </AnimatePresence>
