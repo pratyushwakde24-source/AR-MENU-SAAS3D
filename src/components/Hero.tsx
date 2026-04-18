@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 const MotionDiv = motion.div as any;
 const MotionH1 = motion.h1 as any;
 const MotionP = motion.p as any;
@@ -74,7 +74,11 @@ export default function Hero() {
             <ArrowRight className="w-4 h-4 text-primary" />
           </button>
 
-          <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
+          <AnimatePresence>
+            {isDemoOpen && (
+              <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
+            )}
+          </AnimatePresence>
         </MotionDiv>
 
         <MotionDiv
