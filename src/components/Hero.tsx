@@ -1,13 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 const MotionDiv = motion.div as any;
 const MotionH1 = motion.h1 as any;
 const MotionP = motion.p as any;
 import Hero3D from "./Hero3D";
+import DemoModal from "./DemoModal";
+import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background Gradients */}
@@ -62,9 +66,15 @@ export default function Hero() {
           <button className="w-full sm:w-auto bg-primary text-background px-10 py-5 rounded-full font-headline font-bold text-sm tracking-widest uppercase shadow-[0_0_30px_rgba(207,150,255,0.4)] hover:brightness-110 active:scale-95 transition-all">
             View Menu in Your Room
           </button>
-          <button className="w-full sm:w-auto glass text-foreground px-10 py-5 rounded-full font-headline font-bold text-sm tracking-widest uppercase hover:bg-white/10 active:scale-95 transition-all">
+          <button 
+            onClick={() => setIsDemoOpen(true)}
+            className="w-full sm:w-auto glass text-foreground px-10 py-5 rounded-full font-headline font-bold text-sm tracking-widest uppercase hover:bg-white/10 active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
             Try Live Demo
+            <ArrowRight className="w-4 h-4 text-primary" />
           </button>
+
+          <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
         </MotionDiv>
 
         <MotionDiv
