@@ -39,9 +39,10 @@ export default function DemoModal({ onClose }: DemoModalProps) {
               loop 
               muted 
               playsInline
-              className="w-full h-full object-cover opacity-70"
+              className="w-full h-full object-cover"
+              poster="https://images.pexels.com/photos/3760924/pexels-photo-3760924.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             >
-              <source src="https://assets.mixkit.co/videos/preview/mixkit-augmented-reality-on-a-smartphone-screen-34503-large.mp4" type="video/mp4" />
+              <source src="https://v1.pexels.com/video-files/3760924/3760924-uhd_2160_3840_25fps.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
             
