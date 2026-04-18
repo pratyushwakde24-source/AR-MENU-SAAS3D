@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState, useRef } from "react";
+import React, { Suspense, useState, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { 
   OrbitControls, 
@@ -15,22 +15,33 @@ import { motion, AnimatePresence } from "framer-motion";
 import { motion as motion3d } from "framer-motion-3d";
 import { ShoppingBag, ArrowLeft, ArrowRight, Cpu, ZoomIn, RotateCw, Camera } from "lucide-react";
 import { createXRStore, XR, ARButton, useXRHitTest, Interactive, useXR, useXREvent } from "@react-three/xr";
-import { useEffect, useState } from "react";
 import * as THREE from "three";
+
+// Add TypeScript support for model-viewer
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'model-viewer': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        src?: string;
+        ar?: boolean;
+        'ar-modes'?: string;
+        'ar-placement'?: string;
+        'camera-controls'?: boolean;
+        'touch-action'?: string;
+        'shadow-intensity'?: string;
+        'shadow-softness'?: string;
+        autoplay?: boolean;
+        'auto-rotate'?: boolean;
+      };
+    }
+  }
+}
 
 // Dynamically import model-viewer for client-side only
 if (typeof window !== "undefined") {
   import("@google/model-viewer");
 }
 
-// Add TypeScript support for model-viewer
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'model-viewer': any;
-    }
-  }
-}
 
 const store = createXRStore();
 const MotionDiv = motion.div as any;
