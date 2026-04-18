@@ -17,26 +17,6 @@ import { ShoppingBag, ArrowLeft, ArrowRight, Cpu, ZoomIn, RotateCw, Camera } fro
 import { createXRStore, XR, ARButton, useXRHitTest, Interactive, useXR, useXREvent } from "@react-three/xr";
 import * as THREE from "three";
 
-// Add TypeScript support for model-viewer
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'model-viewer': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
-        src?: string;
-        ar?: boolean;
-        'ar-modes'?: string;
-        'ar-placement'?: string;
-        'camera-controls'?: boolean;
-        'touch-action'?: string;
-        'shadow-intensity'?: string;
-        'shadow-softness'?: string;
-        autoplay?: boolean;
-        'auto-rotate'?: boolean;
-      };
-    }
-  }
-}
-
 // Dynamically import model-viewer for client-side only
 if (typeof window !== "undefined") {
   import("@google/model-viewer");
