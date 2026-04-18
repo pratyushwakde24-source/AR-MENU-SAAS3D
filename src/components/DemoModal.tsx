@@ -100,7 +100,7 @@ export default function DemoModal({ isOpen, onClose }: DemoModalProps) {
                         <h5 className="font-bold text-white mb-1">{step.title}</h5>
                         <p className="text-xs text-foreground/40 leading-relaxed">{step.desc}</p>
                       </div>
-                    </motion.div>
+                    </MotionDiv>
                   ))}
                 </div>
 
