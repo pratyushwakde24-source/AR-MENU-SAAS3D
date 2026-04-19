@@ -63,7 +63,10 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-6"
         >
-          <button className="w-full sm:w-auto bg-primary text-background px-10 py-5 rounded-full font-headline font-bold text-sm tracking-widest uppercase shadow-[0_0_30px_rgba(207,150,255,0.4)] hover:brightness-110 active:scale-95 transition-all">
+          <button 
+            onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}
+            className="w-full sm:w-auto bg-primary text-background px-10 py-5 rounded-full font-headline font-bold text-sm tracking-widest uppercase shadow-[0_0_30px_rgba(207,150,255,0.4)] hover:brightness-110 active:scale-95 transition-all"
+          >
             View Menu in Your Room
           </button>
           <button 

@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Scan, MousePointer2, Camera } from "lucide-react";
+import { X, Play, Scan, MousePointer2, Camera, Smartphone } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 
 const MotionDiv = motion.div as any;
 
@@ -103,9 +104,25 @@ export default function DemoModal({ onClose }: DemoModalProps) {
               ))}
             </div>
 
+            <div className="mt-12 p-6 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center">
+              <div className="bg-white p-3 rounded-2xl mb-4 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                <QRCodeSVG 
+                  value={typeof window !== 'undefined' ? window.location.href : 'https://ar-menu.com'} 
+                  size={120}
+                  level="H"
+                  includeMargin={false}
+                />
+              </div>
+              <div className="flex items-center gap-2 mb-1">
+                <Smartphone className="w-3 h-3 text-primary" />
+                <p className="text-[10px] font-bold text-white uppercase tracking-widest">Scan to try on phone</p>
+              </div>
+              <p className="text-[9px] text-foreground/40 text-center">Open this website on your mobile to unlock the full AR camera experience.</p>
+            </div>
+
             <button 
               onClick={onClose}
-              className="mt-12 w-full bg-gradient-to-r from-primary to-primary-dim py-4 rounded-xl font-headline font-bold text-background tracking-widest uppercase text-[10px] shadow-lg hover:brightness-110 transition-all"
+              className="mt-8 w-full bg-primary text-background py-4 rounded-xl font-headline font-bold tracking-widest uppercase text-[10px] shadow-lg hover:brightness-110 transition-all"
             >
               Got It, Thanks!
             </button>
