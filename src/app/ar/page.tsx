@@ -21,25 +21,35 @@ function ARContent() {
         return;
       }
 
-      // 1. Fetch menu and its owner
-      const { data: menu, error: menuError } = await supabase
-        .from('menus')
-        .select('*, profiles!menus_user_id_fkey(*)')
-        .eq('id', menuId)
-        .single();
+      try {
+        // 1. Fetch menu and its owner
+        const { data: menu, error: menuError } = await supabase
+          .from('menus')
+          .select('*, profiles!menus_user_id_fkey(*)')
+          .eq('id', menuId)
+          .single();
 
-      if (menu) {
-        setMenuData(menu);
-        const profile = menu.profiles;
-        
-        // 2. Check if owner subscription is active
-        if (profile) {
-          const isActive = profile.subscription_status === 'active' && 
-                          (!profile.subscription_end_date || new Date(profile.subscription_end_date) > new Date());
-          setSubscriptionActive(isActive);
+        if (menu) {
+          setMenuData(menu);
+          const profile = menu.profiles;
+          
+          // 2. Check if owner subscription is active
+          if (profile) {
+            const isActive = profile.subscription_status === 'active' && 
+                            (!profile.subscription_end_date || new Date(profile.subscription_end_date) > new Date());
+            setSubscriptionActive(isActive);
+          }
+        } else {
+          console.warn("Menu not found in database, falling back to local data");
+          // Even if not found, we allow it for the demo
+          setSubscriptionActive(true);
         }
+      } catch (err) {
+        console.error("Supabase error, falling back to local data:", err);
+        setSubscriptionActive(true);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     verifySubscription();
