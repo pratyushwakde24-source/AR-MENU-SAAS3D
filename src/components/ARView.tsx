@@ -1157,9 +1157,11 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
               <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
             </button>
 
-            <div className="flex-grow glass p-6 rounded-[2.5rem] relative overflow-hidden group shadow-2xl">
-              <div className="absolute top-4 right-6">
-                <span className="text-10px uppercase tracking-widest text-primary font-bold">Interactive View</span>
+            <div className="flex-grow glass p-8 rounded-[2.5rem] relative overflow-hidden group shadow-2xl">
+              <div className="absolute top-6 right-8 z-30">
+                <div className="bg-primary/10 backdrop-blur-md border border-primary/20 px-3 py-1 rounded-full">
+                  <span className="text-[8px] uppercase tracking-[0.2em] text-primary font-bold whitespace-nowrap">Interactive View</span>
+                </div>
               </div>
               <MotionDiv
                 key={currentIndex}
@@ -1167,7 +1169,7 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <h2 className="text-xl font-headline font-bold mb-1 tracking-tight">{currentItem.name}</h2>
+                <h2 className="text-2xl font-headline font-bold mb-2 tracking-tight pr-32 leading-tight">{currentItem.name}</h2>
                 <p className="text-foreground/50 text-xs font-light pr-12 leading-relaxed">
                   {currentItem.description}
                 </p>
