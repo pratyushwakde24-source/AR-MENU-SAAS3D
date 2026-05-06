@@ -1098,7 +1098,7 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
       {/* HUD Overlay */}
       <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-6">
         {/* Top HUD Controls: Status & Prompts */}
-        <div className="flex flex-col items-center gap-4 mt-20 pointer-events-none">
+        <div className="flex flex-col items-center gap-4 mt-12 pointer-events-none">
           {/* Tracking Status Indicator */}
           <div className="flex items-center gap-2 glass px-4 py-2 rounded-xl border-l-4 border-secondary shadow-lg pointer-events-auto">
             <Cpu className="w-4 h-4 text-secondary" />
