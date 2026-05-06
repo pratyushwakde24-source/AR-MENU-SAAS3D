@@ -836,6 +836,7 @@ function ARScene({
   setPlacement: (p: { position: THREE.Vector3, quaternion: THREE.Quaternion }) => void
 }) {
   const reticleRef = useRef<THREE.Group>(null);
+  const previewRef = useRef<THREE.Group>(null);
   const isPresenting = useXR((state) => !!state.session);
 
   useXRHitTest((results: any, getWorldMatrix: any) => {
@@ -869,18 +870,17 @@ function ARScene({
 
   useXREvent('select', handleSelect);
 
-  // When not in AR, we show a floating preview.
-  // When in AR, we show the hit-test reticle and the placed model.
+  useFrame((state) => {
+    if (previewRef.current) {
+      previewRef.current.rotation.y += 0.01;
+    }
+  });
+
   return (
     <>
-      {/* Debug: Large Yellow Box that should be visible if the scene renders at all */}
-      <mesh position={[0, 0, -2]}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-        <meshStandardMaterial color="yellow" emissive="yellow" />
-      </mesh>
-
-      <ambientLight intensity={0.7} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
+      <ambientLight intensity={1} />
+      <pointLight position={[10, 10, 10]} intensity={1.5} />
+      <directionalLight position={[-5, 5, 5]} intensity={1} />
 
       {!isPresenting ? (
         <group>
@@ -893,28 +893,39 @@ function ARScene({
         <>
           {!placed ? (
             <group ref={reticleRef} visible={false}>
-              <mesh rotation-x={-Math.PI / 2}>
-                <ringGeometry args={[0.1, 0.12, 32]} />
-                <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={2} transparent opacity={0.8} />
+              {/* Placement Reticle */}
+              <mesh rotation-x={-Math.PI / 2} position={[0, 0.01, 0]}>
+                <ringGeometry args={[0.15, 0.17, 32]} />
+                <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={5} transparent opacity={0.8} />
               </mesh>
-              <mesh rotation-x={-Math.PI / 2}>
-                <circleGeometry args={[0.02, 32]} />
-                <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={2} />
+              <mesh rotation-x={-Math.PI / 2} position={[0, 0.01, 0]}>
+                <circleGeometry args={[0.03, 32]} />
+                <meshStandardMaterial color="#00e3fd" emissive="#00e3fd" emissiveIntensity={5} />
               </mesh>
+              
+              {/* Ghost Preview of the Dish */}
+              <group position={[0, 0.2, 0]} scale={0.4} ref={previewRef}>
+                 {model}
+                 {/* Radial pulse effect */}
+                 <mesh rotation-x={-Math.PI / 2} position={[0, -0.4, 0]}>
+                    <ringGeometry args={[0, 2, 32]} />
+                    <meshStandardMaterial color="#00e3fd" transparent opacity={0.1} />
+                 </mesh>
+              </group>
             </group>
           ) : (
             <group
               position={placement?.position}
               quaternion={placement?.quaternion}
             >
-              <Float speed={2} rotationIntensity={0.5} floatIntensity={0.2}>
+              <Float speed={1} rotationIntensity={0.2} floatIntensity={0.1}>
                 {model}
               </Float>
               <ContactShadows
                 position={[0, -0.01, 0]}
-                opacity={0.6}
-                scale={1}
-                blur={1}
+                opacity={0.8}
+                scale={2}
+                blur={1.5}
                 far={10}
                 resolution={256}
                 color="#000000"
@@ -1175,7 +1186,7 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
 
           <div className="flex gap-3">
             <button
-              onClick={() => setIsNativeAROpen(true)}
+              onClick={() => store.enterAR()}
               className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 py-5 rounded-full font-headline font-bold text-white tracking-[0.2em] uppercase text-[10px] shadow-2xl hover:bg-white/20 transition-all flex items-center justify-center gap-2"
             >
               <Camera className="w-4 h-4 text-primary" />
