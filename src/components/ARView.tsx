@@ -1097,34 +1097,45 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
 
       {/* HUD Overlay */}
       <div className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-between p-6">
-        {/* Interaction Prompt */}
-        <div className="flex justify-center mt-20">
-          <MotionDiv
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="glass px-6 py-3 rounded-full flex items-center gap-6 border border-white/10"
-          >
-            <div className="flex items-center gap-2 text-foreground/60 text-[10px] uppercase font-bold tracking-widest">
-              <ZoomIn className="w-3 h-3 text-secondary" />
-              <span>Pinch to zoom</span>
-            </div>
-            <div className="w-[1px] h-3 bg-white/10" />
-            <div className="flex items-center gap-2 text-foreground/60 text-[10px] uppercase font-bold tracking-widest">
-              <RotateCw className="w-3 h-3 text-secondary" />
-              <span>Swipe to rotate</span>
-            </div>
-          </MotionDiv>
-        </div>
+        {/* Top HUD Controls: Status & Prompts */}
+        <div className="flex flex-col items-center gap-4 mt-20 pointer-events-none">
+          {/* Tracking Status Indicator */}
+          <div className="flex items-center gap-2 glass px-4 py-2 rounded-xl border-l-4 border-secondary shadow-lg pointer-events-auto">
+            <Cpu className="w-4 h-4 text-secondary" />
+            <span className="text-[10px] font-headline font-bold uppercase tracking-widest text-secondary">
+              {isPresenting ? 'Spatial Tracking Active' : '3D Preview Mode'}
+            </span>
+          </div>
 
-        {/* Tracking Status & Instructions */}
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 w-full px-6 flex flex-col items-center gap-4">
+          {/* Interaction Prompts (Zoom/Rotate) */}
+          {!isPresenting && (
+            <div className="flex justify-center pointer-events-auto">
+              <MotionDiv
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className="glass px-6 py-3 rounded-full flex items-center gap-6 border border-white/10"
+              >
+                <div className="flex items-center gap-2 text-foreground/60 text-[10px] uppercase font-bold tracking-widest">
+                  <ZoomIn className="w-3 h-3 text-secondary" />
+                  <span>Pinch to zoom</span>
+                </div>
+                <div className="w-[1px] h-3 bg-white/10" />
+                <div className="flex items-center gap-2 text-foreground/60 text-[10px] uppercase font-bold tracking-widest">
+                  <RotateCw className="w-3 h-3 text-secondary" />
+                  <span>Swipe to rotate</span>
+                </div>
+              </MotionDiv>
+            </div>
+          )}
+
+          {/* AR Scanning Instructions */}
           <AnimatePresence>
             {!placed && isPresenting && (
               <MotionDiv
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="bg-primary/20 backdrop-blur-xl border border-primary/40 px-6 py-4 rounded-2xl text-center shadow-[0_0_30px_rgba(207,150,255,0.2)]"
+                className="bg-primary/20 backdrop-blur-xl border border-primary/40 px-6 py-4 rounded-2xl text-center shadow-[0_0_30px_rgba(207,150,255,0.2)] pointer-events-auto"
               >
                 <div className="flex items-center justify-center gap-3 mb-1">
                   <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
@@ -1134,13 +1145,6 @@ export default function ARView({ defaultIndex = 0 }: { defaultIndex?: number }) 
               </MotionDiv>
             )}
           </AnimatePresence>
-
-          <div className="flex items-center gap-2 glass px-4 py-2 rounded-xl border-l-4 border-secondary shadow-lg">
-            <Cpu className="w-4 h-4 text-secondary" />
-            <span className="text-[10px] font-headline font-bold uppercase tracking-widest text-secondary">
-              {isPresenting ? 'Spatial Tracking Active' : '3D Preview Mode'}
-            </span>
-          </div>
         </div>
 
         {/* Info Card */}
